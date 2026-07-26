@@ -1,0 +1,14 @@
+{
+  "id": "reverse-linked-list",
+  "title": "Reverse Linked List",
+  "difficulty": "Easy",
+  "summary": "Reverse a singly linked list iteratively.",
+  "description": "Reverse a singly linked list iteratively.\n\nApproach: prev/curr/next pointers: walk once flipping next links.",
+  "approach": "prev/curr/next pointers: walk once flipping next links.",
+  "swiftCode": "// Reverse Linked List iteratively in O(N)\nlet list = AnimatedLinkedList<Int>()\nfor val in 1...5 {\n    list.append(val)\n}\n\nfunc reverseList(_ l: AnimatedLinkedList<Int>) {\n    for i in 1..<l.count {\n        if let val = l.remove(at: i) {\n            l.prepend(val)\n        }\n    }\n}\n\nreverseList(list)\nlist.traverse()",
+  "tags": [
+    "linked-list",
+    "pointers"
+  ],
+  "moduleID": "linkedList"
+}

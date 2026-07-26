@@ -1,0 +1,15 @@
+{
+  "id": "linked-list-cycle",
+  "title": "Linked List Cycle",
+  "difficulty": "Easy",
+  "summary": "Detect whether a linked list contains a cycle.",
+  "description": "Detect whether a linked list contains a cycle.\n\nApproach: Floyd’s tortoise/hare: if slow and fast ever meet, a cycle exists.",
+  "approach": "Floyd’s tortoise/hare: if slow and fast ever meet, a cycle exists.",
+  "swiftCode": "// Linked List Cycle detection simulation (Floyd's Tortoise and Hare)\nlet list = AnimatedLinkedList<Int>()\nfor v in 1...4 {\n    list.append(v)\n}\n\nfunc hasCycle(_ l: AnimatedLinkedList<Int>) -> Bool {\n    var slow = 0\n    var fast = 0\n    while fast < l.count && fast + 1 < l.count {\n        slow += 1\n        fast += 2\n        if slow == fast {\n            return true\n        }\n    }\n    return false\n}\n\nlet cycleFound = hasCycle(list)",
+  "tags": [
+    "linked-list",
+    "two-pointers",
+    "cycle"
+  ],
+  "moduleID": "linkedList"
+}

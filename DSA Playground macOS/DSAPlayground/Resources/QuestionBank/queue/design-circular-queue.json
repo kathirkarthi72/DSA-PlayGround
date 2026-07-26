@@ -1,0 +1,15 @@
+{
+  "id": "design-circular-queue",
+  "title": "Design Circular Queue",
+  "difficulty": "Medium",
+  "summary": "Implement a fixed-size FIFO queue with wrap-around head/tail indices.",
+  "description": "Implement a fixed-size FIFO queue with wrap-around head/tail indices.\n\nApproach: Track head, tail, and count; enqueue at tail, dequeue at head, modulo capacity.",
+  "approach": "Track head, tail, and count; enqueue at tail, dequeue at head, modulo capacity.",
+  "swiftCode": "// Design Circular Queue with fixed capacity\nstruct MyCircularQueue {\n    private var queue = AnimatedQueue<Int>()\n    private let capacity: Int\n    private var lastInserted = -1\n    \n    init(k: Int) {\n        self.capacity = k\n    }\n    \n    mutating func enQueue(_ value: Int) -> Bool {\n        if queue.count >= capacity {\n            return false\n        }\n        queue.enqueue(value)\n        lastInserted = value\n        return true\n    }\n    \n    mutating func deQueue() -> Bool {\n        if queue.isEmpty {\n            return false\n        }\n        queue.dequeue()\n        return true\n    }\n    \n    func Front() -> Int {\n        return queue.peek() ?? -1\n    }\n    \n    func Rear() -> Int {\n        return queue.isEmpty ? -1 : lastInserted\n    }\n    \n    func isEmpty() -> Bool {\n        return queue.isEmpty\n    }\n    \n    func isFull() -> Bool {\n        return queue.count == capacity\n    }\n}\n\nvar circularQueue = MyCircularQueue(k: 3)\n_ = circularQueue.enQueue(1)\n_ = circularQueue.enQueue(2)\n_ = circularQueue.enQueue(3)\n_ = circularQueue.enQueue(4)\n_ = circularQueue.deQueue()\n_ = circularQueue.enQueue(4)",
+  "tags": [
+    "queue",
+    "design",
+    "circular"
+  ],
+  "moduleID": "queue"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "palindrome-linked-list",
+  "title": "Palindrome Linked List",
+  "difficulty": "Easy",
+  "summary": "Decide whether a singly linked list reads the same forward and backward.",
+  "description": "Decide whether a singly linked list reads the same forward and backward.\n\nApproach: Find the middle, reverse the second half, then compare both halves node by node.",
+  "approach": "Find the middle, reverse the second half, then compare both halves node by node.",
+  "swiftCode": "// Palindrome Linked List verification\nlet list = AnimatedLinkedList<Int>()\nlist.append(1)\nlist.append(2)\nlist.append(3)\nlist.append(2)\nlist.append(1)\n\nfunc isPalindrome(_ l: AnimatedLinkedList<Int>) -> Bool {\n    var vals: [Int] = []\n    while let val = l.remove(at: 0) {\n        vals.append(val)\n    }\n    for v in vals {\n        l.append(v)\n    }\n    return vals == vals.reversed()\n}\n\nlet result = isPalindrome(list)",
+  "tags": [
+    "linked-list",
+    "two-pointers",
+    "palindrome"
+  ],
+  "moduleID": "linkedList"
+}

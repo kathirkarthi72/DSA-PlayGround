@@ -1,0 +1,15 @@
+{
+  "id": "merge-k-idea",
+  "title": "Merge K Sorted Idea",
+  "difficulty": "Hard",
+  "summary": "Understand how a min-heap merges many sorted streams.",
+  "description": "Understand how a min-heap merges many sorted streams.\n\nApproach: Push each stream head; pop min, then push that stream’s next value.",
+  "approach": "Push each stream head; pop min, then push that stream’s next value.",
+  "swiftCode": "// Merge K Sorted Lists concept using Min Heap\nvar heap = AnimatedHeap<Int>(kind: .min)\nlet lists = [[1, 4], [2, 6], [0, 9]]\n\nfor list in lists {\n    for val in list {\n        heap.insert(val)\n    }\n}\n\nvar mergedList: [Int] = []\nwhile !heap.isEmpty {\n    if let val = heap.extract() {\n        mergedList.append(val)\n    }\n}",
+  "tags": [
+    "heap",
+    "merge",
+    "k-way"
+  ],
+  "moduleID": "heap"
+}

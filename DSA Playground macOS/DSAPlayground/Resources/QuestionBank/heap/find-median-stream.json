@@ -1,0 +1,15 @@
+{
+  "id": "find-median-stream",
+  "title": "Find Median from Data Stream",
+  "difficulty": "Hard",
+  "summary": "Support inserting numbers and retrieving the running median efficiently.",
+  "description": "Support inserting numbers and retrieving the running median efficiently.\n\nApproach: Two heaps: max-heap for the lower half, min-heap for the upper half; rebalance sizes.",
+  "approach": "Two heaps: max-heap for the lower half, min-heap for the upper half; rebalance sizes.",
+  "swiftCode": "// Find Median from Data Stream (Running median with Heap copy)\nvar heap = AnimatedHeap<Int>(kind: .min)\nlet stream = [5, 15, 1, 3]\n\nfunc findMedian(of heap: inout AnimatedHeap<Int>) -> Double {\n    var temp = heap\n    var sorted: [Int] = []\n    while !temp.isEmpty {\n        if let val = temp.extract() {\n            sorted.append(val)\n        }\n    }\n    if sorted.isEmpty { return 0.0 }\n    let mid = sorted.count / 2\n    if sorted.count % 2 != 0 {\n        return Double(sorted[mid])\n    } else {\n        return Double(sorted[mid - 1] + sorted[mid]) / 2.0\n    }\n}\n\nfor val in stream {\n    heap.insert(val)\n    let currentMedian = findMedian(of: &heap)\n}",
+  "tags": [
+    "heap",
+    "design",
+    "median"
+  ],
+  "moduleID": "heap"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "moving-average",
+  "title": "Moving Average from Data Stream",
+  "difficulty": "Easy",
+  "summary": "Compute the moving average of the last size values in a stream.",
+  "description": "Compute the moving average of the last size values in a stream.\n\nApproach: Enqueue each value; if size exceeds the window, dequeue the oldest; average = sum / count.",
+  "approach": "Enqueue each value; if size exceeds the window, dequeue the oldest; average = sum / count.",
+  "swiftCode": "// Moving Average from Data Stream using Sliding Window Queue\nstruct MovingAverage {\n    var queue = AnimatedQueue<Double>()\n    let maxSize: Int\n    var runningSum = 0.0\n    \n    mutating func next(_ val: Double) -> Double {\n        if queue.count >= maxSize {\n            if let evicted = queue.dequeue() {\n                runningSum -= evicted\n            }\n        }\n        queue.enqueue(val)\n        runningSum += val\n        return runningSum / Double(queue.count)\n    }\n}\n\nvar filter = MovingAverage(maxSize: 3)\nlet stream = [1.0, 10.0, 3.0, 5.0]\nfor v in stream {\n    _ = filter.next(v)\n}",
+  "tags": [
+    "queue",
+    "sliding-window",
+    "stream"
+  ],
+  "moduleID": "queue"
+}

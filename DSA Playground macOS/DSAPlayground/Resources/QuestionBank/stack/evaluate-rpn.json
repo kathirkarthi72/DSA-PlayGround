@@ -1,0 +1,15 @@
+{
+  "id": "evaluate-rpn",
+  "title": "Evaluate Reverse Polish Notation",
+  "difficulty": "Medium",
+  "summary": "Evaluate an arithmetic expression given in postfix (RPN) form.",
+  "description": "Evaluate an arithmetic expression given in postfix (RPN) form.\n\nApproach: Push operands. On an operator, pop two values, compute, push the result back.",
+  "approach": "Push operands. On an operator, pop two values, compute, push the result back.",
+  "swiftCode": "// Evaluate Reverse Polish Notation (RPN / Postfix)\nvar stack = AnimatedStack<Int>()\nlet tokens = [\"2\", \"1\", \"+\", \"3\", \"*\"]\n\nfunc evaluateRPN(_ tokens: [String], s: inout AnimatedStack<Int>) -> Int {\n    for token in tokens {\n        if token == \"+\" || token == \"-\" || token == \"*\" || token == \"/\" {\n            let b = s.pop() ?? 0\n            let a = s.pop() ?? 0\n            switch token {\n            case \"+\": s.push(a + b)\n            case \"-\": s.push(a - b)\n            case \"*\": s.push(a * b)\n            case \"/\": s.push(a / b)\n            default: break\n            }\n        } else if let num = Int(token) {\n            s.push(num)\n        }\n    }\n    return s.pop() ?? 0\n}\n\nlet resultVal = evaluateRPN(tokens, s: &stack)",
+  "tags": [
+    "stack",
+    "expression",
+    "rpn"
+  ],
+  "moduleID": "stack"
+}

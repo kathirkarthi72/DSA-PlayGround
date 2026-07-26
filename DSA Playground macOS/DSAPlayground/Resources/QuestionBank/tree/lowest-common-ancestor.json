@@ -1,0 +1,15 @@
+{
+  "id": "lowest-common-ancestor",
+  "title": "Lowest Common Ancestor (BST)",
+  "difficulty": "Medium",
+  "summary": "Find the LCA of two nodes in a BST.",
+  "description": "Find the LCA of two nodes in a BST.\n\nApproach: Walk from root: if both targets < node go left; both > go right; else node is LCA.",
+  "approach": "Walk from root: if both targets < node go left; both > go right; else node is LCA.",
+  "swiftCode": "// Lowest Common Ancestor in a BST\nlet tree = AnimatedBinaryTree<Int>()\ntree.insert(20)\ntree.insert(8)\ntree.insert(22)\ntree.insert(4)\ntree.insert(12)\n\nlet leftChild = [20: 8, 8: 4]\nlet rightChild = [20: 22, 8: 12]\n\nfunc findLCA(p: Int, q: Int, t: AnimatedBinaryTree<Int>) -> Int? {\n    var current = 20\n    while true {\n        t.search(current)\n        if p < current && q < current {\n            if let left = leftChild[current] {\n                current = left\n            } else {\n                break\n            }\n        } else if p > current && q > current {\n            if let right = rightChild[current] {\n                current = right\n            } else {\n                break\n            }\n        } else {\n            break\n        }\n    }\n    return current\n}\n\nlet lca = findLCA(p: 4, q: 12, t: tree)",
+  "tags": [
+    "tree",
+    "bst",
+    "lca"
+  ],
+  "moduleID": "tree"
+}

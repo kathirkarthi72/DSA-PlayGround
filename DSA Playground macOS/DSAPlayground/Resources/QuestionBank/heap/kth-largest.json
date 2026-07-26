@@ -1,0 +1,14 @@
+{
+  "id": "kth-largest",
+  "title": "Kth Largest Element",
+  "difficulty": "Medium",
+  "summary": "Find the kth largest element in an unsorted array.",
+  "description": "Find the kth largest element in an unsorted array.\n\nApproach: Maintain a min-heap of size k; the root is the answer.",
+  "approach": "Maintain a min-heap of size k; the root is the answer.",
+  "swiftCode": "// Kth Largest Element using Min Heap of size K\nvar heap = AnimatedHeap<Int>(kind: .min)\nlet k = 3\nlet numbers = [4, 5, 8, 2]\n\nfor num in numbers {\n    heap.insert(num)\n    if heap.count > k {\n        heap.extract()\n    }\n}\n\nlet kthElement = heap.extract() ?? -1",
+  "tags": [
+    "heap",
+    "top-k"
+  ],
+  "moduleID": "heap"
+}

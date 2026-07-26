@@ -1,0 +1,14 @@
+{
+  "id": "time-needed-to-buy",
+  "title": "Time Needed to Buy Tickets",
+  "difficulty": "Easy",
+  "summary": "People in a queue buy one ticket per turn; compute time until person k finishes.",
+  "description": "People in a queue buy one ticket per turn; compute time until person k finishes.\n\nApproach: Simulate with a queue: dequeue front, decrement tickets, re-enqueue if still > 0.",
+  "approach": "Simulate with a queue: dequeue front, decrement tickets, re-enqueue if still > 0.",
+  "swiftCode": "// Time Needed to Buy Tickets queue simulation\nvar queue = AnimatedQueue<Int>()\nlet k = 2\nlet tickets = [2, 6, 3, 4]\n\nfunc timeRequiredToBuy(_ tickets: [Int], _ k: Int, q: inout AnimatedQueue<Int>) -> Int {\n    for i in 0..<tickets.count {\n        q.enqueue(i)\n    }\n    \n    var remaining = tickets\n    var time = 0\n    \n    while !q.isEmpty {\n        guard let buyer = q.dequeue() else { continue }\n        time += 1\n        remaining[buyer] -= 1\n        \n        if buyer == k && remaining[buyer] == 0 {\n            return time\n        }\n        \n        if remaining[buyer] > 0 {\n            q.enqueue(buyer)\n        }\n    }\n    return time\n}\n\nlet totalTime = timeRequiredToBuy(tickets, k, q: &queue)",
+  "tags": [
+    "queue",
+    "simulation"
+  ],
+  "moduleID": "queue"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "top-k-frequent",
+  "title": "Top K Frequent Elements",
+  "difficulty": "Medium",
+  "summary": "Return the k most frequent elements in an array.",
+  "description": "Return the k most frequent elements in an array.\n\nApproach: Count frequencies, then keep a min-heap of size k keyed by frequency.",
+  "approach": "Count frequencies, then keep a min-heap of size k keyed by frequency.",
+  "swiftCode": "// Top K Frequent Elements using Min Heap of size K\nvar heap = AnimatedHeap<Int>(kind: .min)\nlet freqs = [3, 2, 1]\nlet k = 2\n\nfor f in freqs {\n    heap.insert(f)\n    if heap.count > k {\n        heap.extract()\n    }\n}\n\nvar topK: [Int] = []\nwhile !heap.isEmpty {\n    if let f = heap.extract() {\n        topK.append(f)\n    }\n}",
+  "tags": [
+    "heap",
+    "top-k",
+    "frequency"
+  ],
+  "moduleID": "heap"
+}

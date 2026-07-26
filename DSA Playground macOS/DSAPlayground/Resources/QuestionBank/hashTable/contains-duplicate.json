@@ -1,0 +1,15 @@
+{
+  "id": "contains-duplicate",
+  "title": "Contains Duplicate",
+  "difficulty": "Easy",
+  "summary": "Return true if any value appears at least twice in the array.",
+  "description": "Return true if any value appears at least twice in the array.\n\nApproach: Insert each value into a set/map; if a key already exists, a duplicate was found.",
+  "approach": "Insert each value into a set/map; if a key already exists, a duplicate was found.",
+  "swiftCode": "// Contains Duplicate - Check if any value appears at least twice\nvar table = AnimatedHashTable<Int, Bool>()\nlet nums = [1, 2, 3, 1]\n\nfunc hasDuplicates(_ list: [Int], t: inout AnimatedHashTable<Int, Bool>) -> Bool {\n    for num in list {\n        if t.get(num) == true {\n            return true\n        }\n        t.put(num, true)\n    }\n    return false\n}\n\nlet duplicateResult = hasDuplicates(nums, t: &table)",
+  "tags": [
+    "hash-table",
+    "array",
+    "set"
+  ],
+  "moduleID": "hashTable"
+}

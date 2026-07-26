@@ -1,0 +1,14 @@
+{
+  "id": "recent-counter",
+  "title": "Number of Recent Calls",
+  "difficulty": "Easy",
+  "summary": "Count requests in the last 3000 ms using a sliding window.",
+  "description": "Count requests in the last 3000 ms using a sliding window.\n\nApproach: Enqueue each ping timestamp; dequeue anything older than t-3000; size is the answer.",
+  "approach": "Enqueue each ping timestamp; dequeue anything older than t-3000; size is the answer.",
+  "swiftCode": "// Number of Recent Calls using Sliding Window Queue\nstruct RecentCounter {\n    var queue = AnimatedQueue<Int>()\n    \n    mutating func ping(_ t: Int) -> Int {\n        queue.enqueue(t)\n        while let oldest = queue.peek(), oldest < t - 3000 {\n            queue.dequeue()\n        }\n        return queue.count\n    }\n}\n\nvar counter = RecentCounter()\nlet requests = [1, 100, 3001, 3002]\nfor req in requests {\n    _ = counter.ping(req)\n}",
+  "tags": [
+    "queue",
+    "sliding-window"
+  ],
+  "moduleID": "queue"
+}

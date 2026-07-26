@@ -1,0 +1,15 @@
+{
+  "id": "move-zeroes",
+  "title": "Move Zeroes",
+  "difficulty": "Easy",
+  "summary": "Move all zeroes to the end while keeping the relative order of non-zeroes.",
+  "description": "Move all zeroes to the end while keeping the relative order of non-zeroes.\n\nApproach: Write non-zeroes to the front with a slow pointer, then fill the rest with zeroes.",
+  "approach": "Write non-zeroes to the front with a slow pointer, then fill the rest with zeroes.",
+  "swiftCode": "// Move Zeroes - Move all zeroes to the end in-place\nvar array = AnimatedArray<Int>()\narray.append(0)\narray.append(1)\narray.append(0)\narray.append(3)\narray.append(12)\n\nfunc moveZeroes(arr: inout AnimatedArray<Int>) {\n    var lastNonZeroFoundAt = 0\n    for i in 0..<arr.count {\n        if let current = arr.at(i), current != 0 {\n            if let val = arr.remove(at: i) {\n                arr.insert(val, at: lastNonZeroFoundAt)\n            }\n            lastNonZeroFoundAt += 1\n        }\n    }\n}\n\nmoveZeroes(arr: &array)",
+  "tags": [
+    "array",
+    "two-pointers",
+    "in-place"
+  ],
+  "moduleID": "array"
+}

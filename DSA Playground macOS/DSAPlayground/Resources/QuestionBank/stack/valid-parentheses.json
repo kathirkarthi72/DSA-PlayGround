@@ -1,0 +1,15 @@
+{
+  "id": "valid-parentheses",
+  "title": "Valid Parentheses",
+  "difficulty": "Easy",
+  "summary": "Given a string of brackets, decide if every open bracket is closed in the correct order.",
+  "description": "Given a string of brackets, decide if every open bracket is closed in the correct order.\n\nApproach: Scan left→right. Push opens. On a close, pop and match. Empty stack at end ⇒ valid.",
+  "approach": "Scan left→right. Push opens. On a close, pop and match. Empty stack at end ⇒ valid.",
+  "swiftCode": "// Valid Parentheses matching using Stack\nvar stack = AnimatedStack<String>()\nlet parens = [\"(\", \"[\", \"]\", \")\"]\n\nfunc isValid(_ sequence: [String], s: inout AnimatedStack<String>) -> Bool {\n    for ch in sequence {\n        if ch == \"(\" || ch == \"{\" || ch == \"[\" {\n            if ch == \"(\" { s.push(\")\") }\n            if ch == \"{\" { s.push(\"}\") }\n            if ch == \"[\" { s.push(\"]\") }\n        } else {\n            if s.isEmpty || s.pop() != ch {\n                return false\n            }\n        }\n    }\n    return s.isEmpty\n}\n\nlet result = isValid(parens, s: &stack)",
+  "tags": [
+    "stack",
+    "parsing",
+    "matching"
+  ],
+  "moduleID": "stack"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "daily-temperatures",
+  "title": "Daily Temperatures",
+  "difficulty": "Medium",
+  "summary": "For each day, how many days until a warmer temperature?",
+  "description": "For each day, how many days until a warmer temperature?\n\nApproach: Monotonic decreasing stack of indices. When a warmer day arrives, resolve earlier days.",
+  "approach": "Monotonic decreasing stack of indices. When a warmer day arrives, resolve earlier days.",
+  "swiftCode": "// Daily Temperatures using Monotonic Stack\nvar stack = AnimatedStack<Int>()\nlet temps = [73, 74, 75, 71, 69, 72, 76]\n\nfunc dailyTemperatures(_ temperatures: [Int], s: inout AnimatedStack<Int>) -> [Int] {\n    var result = [Int](repeating: 0, count: temperatures.count)\n    for i in 0..<temperatures.count {\n        while !s.isEmpty {\n            if let topIdx = s.peek(), temperatures[i] > temperatures[topIdx] {\n                result[topIdx] = i - topIdx\n                s.pop()\n            } else {\n                break\n            }\n        }\n        s.push(i)\n    }\n    return result\n}\n\nlet ans = dailyTemperatures(temps, s: &stack)",
+  "tags": [
+    "stack",
+    "monotonic",
+    "array"
+  ],
+  "moduleID": "stack"
+}

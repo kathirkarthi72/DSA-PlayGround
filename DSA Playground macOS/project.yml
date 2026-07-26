@@ -1,0 +1,99 @@
+name: DSAPlayground
+options:
+  bundleIdPrefix: com.dsaplayground
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+packages:
+  DSACore:
+    path: Packages/DSACore
+  DSAKit:
+    path: Packages/DSAKit
+  DSAArray:
+    path: Packages/DSAArray
+  DSALinkedList:
+    path: Packages/DSALinkedList
+  DSAStack:
+    path: Packages/DSAStack
+  DSAQueue:
+    path: Packages/DSAQueue
+  DSAHashTable:
+    path: Packages/DSAHashTable
+  DSAHeap:
+    path: Packages/DSAHeap
+  DSATree:
+    path: Packages/DSATree
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
+    ENABLE_HARDENED_RUNTIME: NO
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGNING_ALLOWED: YES
+    CODE_SIGNING_REQUIRED: NO
+
+targets:
+  DSAPlayground:
+    type: application
+    platform: macOS
+    sources:
+      - path: DSAPlayground
+        excludes:
+          - Resources/DSAKitSources/**
+          - Resources/QuestionBank/**
+      - path: DSAPlayground/Resources/QuestionBank
+        type: folder
+    resources:
+      - path: DSAPlayground/App/Assets.xcassets
+    postCompileScripts:
+      - name: Copy DSAKit Sources
+        basedOnDependencyAnalysis: false
+        script: |
+          set -euo pipefail
+          DEST="${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DSAKitSources"
+          SRC="${SRCROOT}/Packages/DSAKit/Sources/DSAKit"
+          mkdir -p "${DEST}"
+          cp "${SRC}/"*.swift "${DEST}/"
+          # Keep app Resources mirror in sync for local #filePath fallbacks.
+          mkdir -p "${SRCROOT}/DSAPlayground/Resources/DSAKitSources"
+          cp "${SRC}/"*.swift "${SRCROOT}/DSAPlayground/Resources/DSAKitSources/"
+    info:
+      path: DSAPlayground/App/Info.plist
+      properties:
+        CFBundleDisplayName: DSA Playground
+        CFBundleName: DSA Playground
+        LSMinimumSystemVersion: "26.0"
+        NSHighResolutionCapable: true
+        NSPrincipalClass: NSApplication
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dsaplayground.app
+        PRODUCT_NAME: DSA Playground
+        GENERATE_INFOPLIST_FILE: NO
+        COMBINE_HIDPI_IMAGES: YES
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/../Frameworks"
+        ENABLE_APP_SANDBOX: NO
+        SWIFT_STRICT_CONCURRENCY: minimal
+    dependencies:
+      - package: DSACore
+      - package: DSAKit
+      - package: DSAArray
+      - package: DSALinkedList
+      - package: DSAStack
+      - package: DSAQueue
+      - package: DSAHashTable
+      - package: DSAHeap
+      - package: DSATree
+
+schemes:
+  DSAPlayground:
+    build:
+      targets:
+        DSAPlayground: all
+    run:
+      config: Debug

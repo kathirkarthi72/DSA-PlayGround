@@ -1,0 +1,15 @@
+{
+  "id": "range-sum-bst",
+  "title": "Range Sum of BST",
+  "difficulty": "Easy",
+  "summary": "Return the sum of all node values in the inclusive range [low, high].",
+  "description": "Return the sum of all node values in the inclusive range [low, high].\n\nApproach: DFS/BST prune: skip left of low, skip right of high; add values inside the range.",
+  "approach": "DFS/BST prune: skip left of low, skip right of high; add values inside the range.",
+  "swiftCode": "// Range Sum of BST (Pruned Recursive search)\nlet tree = AnimatedBinaryTree<Int>()\ntree.insert(10)\ntree.insert(5)\ntree.insert(15)\ntree.insert(3)\ntree.insert(7)\ntree.insert(18)\n\nlet low = 7\nlet high = 15\n\nlet leftChild = [10: 5, 5: 3, 15: -1]\nlet rightChild = [10: 15, 5: 7, 15: 18]\n\nfunc rangeSumBST(root: Int, low: Int, high: Int, t: AnimatedBinaryTree<Int>) -> Int {\n    if root == -1 { return 0 }\n    \n    t.search(root)\n    var sum = 0\n    if root >= low && root <= high {\n        sum += root\n    }\n    \n    if root > low {\n        if let left = leftChild[root] {\n            sum += rangeSumBST(root: left, low: low, high: high, t: t)\n        }\n    }\n    if root < high {\n        if let right = rightChild[root] {\n            sum += rangeSumBST(root: right, low: low, high: high, t: t)\n        }\n    }\n    return sum\n}\n\nlet sumVal = rangeSumBST(root: 10, low: low, high: high, t: tree)",
+  "tags": [
+    "tree",
+    "bst",
+    "dfs"
+  ],
+  "moduleID": "tree"
+}

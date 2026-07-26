@@ -1,0 +1,15 @@
+{
+  "id": "first-unique-char",
+  "title": "First Unique Character",
+  "difficulty": "Easy",
+  "summary": "Find the first non-repeating character in a string.",
+  "description": "Find the first non-repeating character in a string.\n\nApproach: Count frequencies in a map, then scan the string for count == 1.",
+  "approach": "Count frequencies in a map, then scan the string for count == 1.",
+  "swiftCode": "// First Unique Character - Find the first non-repeating character\nvar table = AnimatedHashTable<String, Int>()\nlet text = [\"l\", \"e\", \"e\", \"t\", \"c\", \"o\", \"d\", \"e\"]\n\nfunc firstUniqChar(_ chars: [String], t: inout AnimatedHashTable<String, Int>) -> Int {\n    for char in chars {\n        let count = t.get(char) ?? 0\n        t.put(char, count + 1)\n    }\n    for i in 0..<chars.count {\n        if t.get(chars[i]) == 1 {\n            return i\n        }\n    }\n    return -1\n}\n\nlet firstUniqueIndex = firstUniqChar(text, t: &table)",
+  "tags": [
+    "hash-table",
+    "string",
+    "frequency"
+  ],
+  "moduleID": "hashTable"
+}

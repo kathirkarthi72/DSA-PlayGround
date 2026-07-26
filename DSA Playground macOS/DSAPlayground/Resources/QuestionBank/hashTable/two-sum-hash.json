@@ -1,0 +1,15 @@
+{
+  "id": "two-sum-hash",
+  "title": "Two Sum (Hash Map)",
+  "difficulty": "Easy",
+  "summary": "Return indices of the two numbers that add up to target.",
+  "description": "Return indices of the two numbers that add up to target.\n\nApproach: One pass: for each x, look up target-x in the map; else store x→index.",
+  "approach": "One pass: for each x, look up target-x in the map; else store x→index.",
+  "swiftCode": "// Two Sum using Hash Map\nvar table = AnimatedHashTable<Int, Int>()\nlet nums = [3, 2, 4]\nlet target = 6\n\nfunc twoSumHash(_ nums: [Int], _ target: Int, t: inout AnimatedHashTable<Int, Int>) -> [Int] {\n    for i in 0..<nums.count {\n        let val = nums[i]\n        let complement = target - val\n        if let compIndex = t.get(complement) {\n            return [compIndex, i]\n        }\n        t.put(val, i)\n    }\n    return []\n}\n\nlet indices = twoSumHash(nums, target, t: &table)",
+  "tags": [
+    "hash-table",
+    "array",
+    "two-sum"
+  ],
+  "moduleID": "hashTable"
+}

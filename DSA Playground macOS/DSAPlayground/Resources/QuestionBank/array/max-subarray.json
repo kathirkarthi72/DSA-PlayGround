@@ -1,0 +1,15 @@
+{
+  "id": "max-subarray",
+  "title": "Maximum Subarray",
+  "difficulty": "Medium",
+  "summary": "Find the contiguous subarray with the largest sum (Kadane).",
+  "description": "Find the contiguous subarray with the largest sum (Kadane).\n\nApproach: Track best ending-here vs best overall; reset ending-here when it goes negative.",
+  "approach": "Track best ending-here vs best overall; reset ending-here when it goes negative.",
+  "swiftCode": "// Maximum Subarray - Kadane's Algorithm\nvar array = AnimatedArray<Int>()\narray.append(-2)\narray.append(1)\narray.append(-3)\narray.append(4)\narray.append(-1)\narray.append(2)\narray.append(1)\n\nfunc maxSubArray(arr: inout AnimatedArray<Int>) -> Int {\n    guard !arr.isEmpty else { return 0 }\n    \n    var currentSum = arr.at(0) ?? 0\n    var maxSum = currentSum\n    \n    for i in 1..<arr.count {\n        if let val = arr.at(i) {\n            currentSum = max(val, currentSum + val)\n            maxSum = max(maxSum, currentSum)\n        }\n    }\n    return maxSum\n}\n\nlet maxVal = maxSubArray(arr: &array)",
+  "tags": [
+    "array",
+    "kadane",
+    "dp"
+  ],
+  "moduleID": "array"
+}

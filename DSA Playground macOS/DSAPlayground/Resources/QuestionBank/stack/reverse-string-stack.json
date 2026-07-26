@@ -1,0 +1,15 @@
+{
+  "id": "reverse-string-stack",
+  "title": "Reverse String with Stack",
+  "difficulty": "Easy",
+  "summary": "Reverse a sequence by pushing characters then popping them back out.",
+  "description": "Reverse a sequence by pushing characters then popping them back out.\n\nApproach: Push every character onto a stack, then pop until empty — LIFO yields the reverse order.",
+  "approach": "Push every character onto a stack, then pop until empty — LIFO yields the reverse order.",
+  "swiftCode": "// Reverse String using a Stack\nvar stack = AnimatedStack<String>()\nlet chars = [\"H\", \"e\", \"l\", \"l\", \"o\"]\n\nfunc reverseString(_ sequence: [String], s: inout AnimatedStack<String>) -> [String] {\n    for ch in sequence {\n        s.push(ch)\n    }\n    var reversed: [String] = []\n    while !s.isEmpty {\n        if let popped = s.pop() {\n            reversed.append(popped)\n        }\n    }\n    return reversed\n}\n\nlet reversed = reverseString(chars, s: &stack)",
+  "tags": [
+    "stack",
+    "string",
+    "reverse"
+  ],
+  "moduleID": "stack"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "group-anagrams",
+  "title": "Group Anagrams",
+  "difficulty": "Medium",
+  "summary": "Group words that are anagrams of each other.",
+  "description": "Group words that are anagrams of each other.\n\nApproach: Sort each word as the map key; append the original word to that bucket.",
+  "approach": "Sort each word as the map key; append the original word to that bucket.",
+  "swiftCode": "// Group Anagrams - Group words that are anagrams of each other\nvar table = AnimatedHashTable<String, String>()\nlet words = [\"eat\", \"tea\", \"tan\", \"ate\", \"nat\", \"bat\"]\n\nfunc sortChars(_ word: String) -> String {\n    return String(word.sorted())\n}\n\nfor word in words {\n    let key = sortChars(word)\n    if let existing = table.get(key) {\n        table.put(key, existing + \",\" + word)\n    } else {\n        table.put(key, word)\n    }\n}",
+  "tags": [
+    "hash-table",
+    "string",
+    "anagram"
+  ],
+  "moduleID": "hashTable"
+}

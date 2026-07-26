@@ -1,0 +1,15 @@
+{
+  "id": "remove-duplicates",
+  "title": "Remove Duplicates from Sorted Array",
+  "difficulty": "Easy",
+  "summary": "Remove duplicates in-place from a sorted array; return the new length.",
+  "description": "Remove duplicates in-place from a sorted array; return the new length.\n\nApproach: Slow/fast pointers: write unique values forward with the slow index.",
+  "approach": "Slow/fast pointers: write unique values forward with the slow index.",
+  "swiftCode": "// Remove Duplicates from Sorted Array in-place\nvar array = AnimatedArray<Int>()\narray.append(1)\narray.append(1)\narray.append(2)\narray.append(2)\narray.append(3)\n\nfunc removeDuplicates(arr: inout AnimatedArray<Int>) {\n    var i = 0\n    while i < arr.count - 1 {\n        if let val1 = arr.at(i), let val2 = arr.at(i + 1), val1 == val2 {\n            arr.remove(at: i + 1)\n        } else {\n            i += 1\n        }\n    }\n}\n\nremoveDuplicates(arr: &array)",
+  "tags": [
+    "array",
+    "two-pointers",
+    "in-place"
+  ],
+  "moduleID": "array"
+}

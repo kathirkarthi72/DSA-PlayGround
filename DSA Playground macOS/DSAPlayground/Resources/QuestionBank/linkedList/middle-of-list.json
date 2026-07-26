@@ -1,0 +1,14 @@
+{
+  "id": "middle-of-list",
+  "title": "Middle of the Linked List",
+  "difficulty": "Easy",
+  "summary": "Return the middle node (second middle if even length).",
+  "description": "Return the middle node (second middle if even length).\n\nApproach: Slow/fast pointers: fast moves 2×; when fast ends, slow is middle.",
+  "approach": "Slow/fast pointers: fast moves 2×; when fast ends, slow is middle.",
+  "swiftCode": "// Middle of the Linked List (Fast & Slow Pointers)\nlet list = AnimatedLinkedList<Int>()\nfor val in [10, 20, 30, 40, 50] {\n    list.append(val)\n}\n\nfunc findMiddleIndex(_ l: AnimatedLinkedList<Int>) -> Int {\n    if l.isEmpty { return -1 }\n    var slow = 0\n    var fast = 0\n    while fast < l.count && fast + 1 < l.count {\n        slow += 1\n        fast += 2\n    }\n    return slow\n}\n\nlet midIdx = findMiddleIndex(list)\nlist.traverse()",
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "moduleID": "linkedList"
+}

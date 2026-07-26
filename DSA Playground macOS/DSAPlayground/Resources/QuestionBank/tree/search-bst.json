@@ -1,0 +1,15 @@
+{
+  "id": "search-bst",
+  "title": "Search in a BST",
+  "difficulty": "Easy",
+  "summary": "Find a node with a given value in a binary search tree.",
+  "description": "Find a node with a given value in a binary search tree.\n\nApproach: Walk left if target < node, right if target > node, until found or nil.",
+  "approach": "Walk left if target < node, right if target > node, until found or nil.",
+  "swiftCode": "// Search in a Binary Search Tree (BST)\nlet tree = AnimatedBinaryTree<Int>()\ntree.insert(8)\ntree.insert(3)\ntree.insert(10)\ntree.insert(1)\ntree.insert(6)\n\nlet target = 6\nlet exists = tree.search(target)",
+  "tags": [
+    "tree",
+    "bst",
+    "search"
+  ],
+  "moduleID": "tree"
+}

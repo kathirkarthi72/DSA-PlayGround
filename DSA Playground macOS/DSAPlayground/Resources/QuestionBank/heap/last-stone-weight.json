@@ -1,0 +1,14 @@
+{
+  "id": "last-stone-weight",
+  "title": "Last Stone Weight",
+  "difficulty": "Easy",
+  "summary": "Smash the two heaviest stones until one (or none) remains.",
+  "description": "Smash the two heaviest stones until one (or none) remains.\n\nApproach: Max-heap: pop two, push difference if non-zero.",
+  "approach": "Max-heap: pop two, push difference if non-zero.",
+  "swiftCode": "// Last Stone Weight using Max Heap\nvar heap = AnimatedHeap<Int>(kind: .max)\nlet stones = [2, 7, 4, 1, 8, 1]\n\nfor stone in stones {\n    heap.insert(stone)\n}\n\nwhile heap.count > 1 {\n    if let s1 = heap.extract(), let s2 = heap.extract(), s1 != s2 {\n        heap.insert(s1 - s2)\n    }\n}\n\nlet lastStone = heap.extract() ?? 0",
+  "tags": [
+    "heap",
+    "simulation"
+  ],
+  "moduleID": "heap"
+}

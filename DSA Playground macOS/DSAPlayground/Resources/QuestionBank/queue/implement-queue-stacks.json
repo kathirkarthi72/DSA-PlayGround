@@ -1,0 +1,15 @@
+{
+  "id": "implement-queue-stacks",
+  "title": "Queue with Stacks",
+  "difficulty": "Easy",
+  "summary": "Implement a FIFO queue using only two stacks.",
+  "description": "Implement a FIFO queue using only two stacks.\n\nApproach: Enqueue to in-stack. On dequeue, if out-stack empty, pour in→out, then pop out.",
+  "approach": "Enqueue to in-stack. On dequeue, if out-stack empty, pour in→out, then pop out.",
+  "swiftCode": "// Implement Queue using Two Stacks\nstruct QueueWithStacks {\n    var stack1 = AnimatedStack<Int>()\n    var stack2 = AnimatedStack<Int>()\n    \n    mutating func enqueue(_ val: Int) {\n        stack1.push(val)\n    }\n    \n    mutating func dequeue() -> Int? {\n        if stack2.isEmpty {\n            while !stack1.isEmpty {\n                if let popped = stack1.pop() {\n                    stack2.push(popped)\n                }\n            }\n        }\n        return stack2.pop()\n    }\n}\n\nvar queue = QueueWithStacks()\nqueue.enqueue(10)\nqueue.enqueue(20)\nqueue.enqueue(30)\nlet firstOut = queue.dequeue()",
+  "tags": [
+    "queue",
+    "stack",
+    "design"
+  ],
+  "moduleID": "queue"
+}

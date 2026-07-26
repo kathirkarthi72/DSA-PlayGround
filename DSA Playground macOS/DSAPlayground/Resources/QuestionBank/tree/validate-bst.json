@@ -1,0 +1,15 @@
+{
+  "id": "validate-bst",
+  "title": "Validate Binary Search Tree",
+  "difficulty": "Medium",
+  "summary": "Check whether a binary tree is a valid BST.",
+  "description": "Check whether a binary tree is a valid BST.\n\nApproach: DFS with (low, high) bounds, or inorder must be strictly increasing.",
+  "approach": "DFS with (low, high) bounds, or inorder must be strictly increasing.",
+  "swiftCode": "// Validate Binary Search Tree using sorted inorder verification\nlet tree = AnimatedBinaryTree<Int>()\ntree.insert(10)\ntree.insert(5)\ntree.insert(15)\n\nfunc isValidBST(t: AnimatedBinaryTree<Int>, keys: [Int]) -> Bool {\n    var prev = Int.min\n    for val in keys {\n        if t.search(val) {\n            if val <= prev {\n                return false\n            }\n            prev = val\n        }\n    }\n    return true\n}\n\nlet keysToVerify = [5, 10, 15]\nlet isValid = isValidBST(t: tree, keys: keysToVerify)",
+  "tags": [
+    "tree",
+    "bst",
+    "dfs"
+  ],
+  "moduleID": "tree"
+}

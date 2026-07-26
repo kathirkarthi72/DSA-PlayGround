@@ -1,0 +1,15 @@
+{
+  "id": "two-sum",
+  "title": "Two Sum",
+  "difficulty": "Easy",
+  "summary": "Find two indices whose values add up to a target.",
+  "description": "Find two indices whose values add up to a target.\n\nApproach: Scan once with a hash map of value→index, or sort + two pointers for values only.",
+  "approach": "Scan once with a hash map of value→index, or sort + two pointers for values only.",
+  "swiftCode": "// Two Sum - Find indices of two numbers that add up to target\nvar array = AnimatedArray<Int>()\narray.append(2)\narray.append(7)\narray.append(11)\narray.append(15)\nlet target = 9\n\nfunc findTwoSum(arr: inout AnimatedArray<Int>, target: Int) -> [Int] {\n    for i in 0..<arr.count {\n        for j in (i + 1)..<arr.count {\n            if let val1 = arr.at(i), let val2 = arr.at(j), val1 + val2 == target {\n                return [i, j]\n            }\n        }\n    }\n    return []\n}\n\nlet result = findTwoSum(arr: &array, target: target)",
+  "tags": [
+    "array",
+    "hashmap",
+    "two-pointers"
+  ],
+  "moduleID": "array"
+}

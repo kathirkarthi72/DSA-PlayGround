@@ -1,0 +1,15 @@
+{
+  "id": "ransom-note",
+  "title": "Ransom Note",
+  "difficulty": "Easy",
+  "summary": "Decide if ransomNote can be constructed from magazine letters.",
+  "description": "Decide if ransomNote can be constructed from magazine letters.\n\nApproach: Count magazine letter frequencies, then decrement for each ransom character.",
+  "approach": "Count magazine letter frequencies, then decrement for each ransom character.",
+  "swiftCode": "// Ransom Note - Check if note can be constructed from magazine letters\nvar table = AnimatedHashTable<String, Int>()\nlet magazine = [\"a\", \"b\", \"c\", \"a\"]\nlet ransom = [\"a\", \"a\", \"b\"]\n\nfunc canConstruct(_ ransom: [String], from magazine: [String], t: inout AnimatedHashTable<String, Int>) -> Bool {\n    for char in magazine {\n        let count = t.get(char) ?? 0\n        t.put(char, count + 1)\n    }\n    for char in ransom {\n        let count = t.get(char) ?? 0\n        if count <= 0 {\n            return false\n        }\n        t.put(char, count - 1)\n    }\n    return true\n}\n\nlet possible = canConstruct(ransom, from: magazine, t: &table)",
+  "tags": [
+    "hash-table",
+    "string",
+    "frequency"
+  ],
+  "moduleID": "hashTable"
+}

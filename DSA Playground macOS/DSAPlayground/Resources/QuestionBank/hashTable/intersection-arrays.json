@@ -1,0 +1,15 @@
+{
+  "id": "intersection-arrays",
+  "title": "Intersection of Two Arrays",
+  "difficulty": "Easy",
+  "summary": "Return the unique values that appear in both arrays.",
+  "description": "Return the unique values that appear in both arrays.\n\nApproach: Put the first array into a set, then collect values from the second that hit the set.",
+  "approach": "Put the first array into a set, then collect values from the second that hit the set.",
+  "swiftCode": "// Intersection of Two Arrays\nvar table = AnimatedHashTable<Int, Bool>()\nlet nums1 = [1, 2, 2, 1]\nlet nums2 = [2, 2, 3]\n\nfunc intersection(_ arr1: [Int], _ arr2: [Int], t: inout AnimatedHashTable<Int, Bool>) -> [Int] {\n    for num in arr1 {\n        t.put(num, true)\n    }\n    var result: [Int] = []\n    for num in arr2 {\n        if t.get(num) == true {\n            result.append(num)\n            t.put(num, false)\n        }\n    }\n    return result\n}\n\nlet intersect = intersection(nums1, nums2, t: &table)",
+  "tags": [
+    "hash-table",
+    "array",
+    "set"
+  ],
+  "moduleID": "hashTable"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "delete-node-bst",
+  "title": "Delete Node in a BST",
+  "difficulty": "Medium",
+  "summary": "Delete a value from a BST and restore the BST property.",
+  "description": "Delete a value from a BST and restore the BST property.\n\nApproach: Handle 0/1/2 children; for two children, replace with inorder successor then delete that.",
+  "approach": "Handle 0/1/2 children; for two children, replace with inorder successor then delete that.",
+  "swiftCode": "// Delete Node in a BST\nlet tree = AnimatedBinaryTree<Int>()\ntree.insert(50)\ntree.insert(30)\ntree.insert(70)\ntree.insert(20)\ntree.insert(40)\n\ntree.delete(30)\ntree.traverseInorder()",
+  "tags": [
+    "tree",
+    "bst",
+    "delete"
+  ],
+  "moduleID": "tree"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "rotate-array",
+  "title": "Rotate Array",
+  "difficulty": "Medium",
+  "summary": "Rotate the array to the right by k steps.",
+  "description": "Rotate the array to the right by k steps.\n\nApproach: Reverse all, reverse first k, reverse the rest — or use an extra buffer.",
+  "approach": "Reverse all, reverse first k, reverse the rest — or use an extra buffer.",
+  "swiftCode": "// Rotate Array - Rotate the array to the right by k steps\nvar array = AnimatedArray<Int>()\nfor val in 1...5 {\n    array.append(val)\n}\nlet k = 2\n\nfunc rotateArray(arr: inout AnimatedArray<Int>, steps: Int) {\n    guard !arr.isEmpty else { return }\n    let actualSteps = steps % arr.count\n    for _ in 0..<actualSteps {\n        if let lastVal = arr.remove(at: arr.count - 1) {\n            arr.insert(lastVal, at: 0)\n        }\n    }\n}\n\nrotateArray(arr: &array, steps: k)",
+  "tags": [
+    "array",
+    "rotate",
+    "in-place"
+  ],
+  "moduleID": "array"
+}

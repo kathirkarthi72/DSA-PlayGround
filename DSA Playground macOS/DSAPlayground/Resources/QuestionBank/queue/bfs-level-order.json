@@ -1,0 +1,15 @@
+{
+  "id": "bfs-level-order",
+  "title": "BFS Level Order Flow",
+  "difficulty": "Medium",
+  "summary": "Practice multi-source BFS enqueue/dequeue flow.",
+  "description": "Practice multi-source BFS enqueue/dequeue flow.\n\nApproach: Seed the queue with sources, then process level-by-level expanding neighbors.",
+  "approach": "Seed the queue with sources, then process level-by-level expanding neighbors.",
+  "swiftCode": "// BFS Level Order Traversal on Graph using Queue\nvar queue = AnimatedQueue<String>()\nqueue.enqueue(\"A\")\n\nlet graph = [\n    \"A\": [\"B\", \"C\"],\n    \"B\": [\"D\"],\n    \"C\": [],\n    \"D\": []\n]\n\nvar visited: [String] = []\n\nwhile !queue.isEmpty {\n    if let current = queue.dequeue() {\n        visited.append(current)\n        if let neighbors = graph[current] {\n            for neighbor in neighbors {\n                queue.enqueue(neighbor)\n            }\n        }\n    }\n}",
+  "tags": [
+    "queue",
+    "bfs",
+    "graph"
+  ],
+  "moduleID": "queue"
+}

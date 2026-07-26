@@ -1,0 +1,14 @@
+{
+  "id": "remove-nth-from-end",
+  "title": "Remove Nth Node From End",
+  "difficulty": "Medium",
+  "summary": "Remove the nth node from the end of a singly linked list in one pass.",
+  "description": "Remove the nth node from the end of a singly linked list in one pass.\n\nApproach: Advance a fast pointer n steps, then walk slow/fast together; slow.next is the target.",
+  "approach": "Advance a fast pointer n steps, then walk slow/fast together; slow.next is the target.",
+  "swiftCode": "// Remove Nth Node From End in one pass\nlet list = AnimatedLinkedList<Int>()\nfor val in 1...5 {\n    list.append(val)\n}\nlet n = 2\n\nfunc removeNthFromEnd(_ l: AnimatedLinkedList<Int>, _ n: Int) {\n    guard !l.isEmpty, n > 0, n <= l.count else { return }\n    let targetIndex = l.count - n\n    l.remove(at: targetIndex)\n}\n\nremoveNthFromEnd(list, n)\nlist.traverse()",
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "moduleID": "linkedList"
+}

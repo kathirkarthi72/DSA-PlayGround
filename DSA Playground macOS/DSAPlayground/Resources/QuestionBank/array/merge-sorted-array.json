@@ -1,0 +1,15 @@
+{
+  "id": "merge-sorted-array",
+  "title": "Merge Sorted Array",
+  "difficulty": "Easy",
+  "summary": "Merge nums2 into nums1 which has extra space at the end.",
+  "description": "Merge nums2 into nums1 which has extra space at the end.\n\nApproach: Fill from the back with the larger of the two tails to avoid overwriting.",
+  "approach": "Fill from the back with the larger of the two tails to avoid overwriting.",
+  "swiftCode": "// Merge Sorted Array - Merge arr2 into arr1 in sorted order\nvar array1 = AnimatedArray<Int>()\nvar array2 = AnimatedArray<Int>()\narray1.append(1)\narray1.append(3)\narray1.append(5)\narray2.append(2)\narray2.append(4)\narray2.append(6)\n\nfunc mergeSorted(arr1: inout AnimatedArray<Int>, arr2: inout AnimatedArray<Int>) {\n    for j in 0..<arr2.count {\n        guard let val = arr2.at(j) else { continue }\n        var insertPos = arr1.count\n        for i in 0..<arr1.count {\n            if let current = arr1.at(i), current > val {\n                insertPos = i\n                break\n            }\n        }\n        arr1.insert(val, at: insertPos)\n    }\n}\n\nmergeSorted(arr1: &array1, arr2: &array2)",
+  "tags": [
+    "array",
+    "merge",
+    "two-pointers"
+  ],
+  "moduleID": "array"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "min-stack",
+  "title": "Min Stack",
+  "difficulty": "Medium",
+  "summary": "Design a stack that supports push, pop, top, and retrieving the minimum in O(1).",
+  "description": "Design a stack that supports push, pop, top, and retrieving the minimum in O(1).\n\nApproach: Keep a parallel mins stack: push min(x, mins.top) with each push; pop both together.",
+  "approach": "Keep a parallel mins stack: push min(x, mins.top) with each push; pop both together.",
+  "swiftCode": "// Min Stack Design with O(1) minimum lookup\nstruct MinStack {\n    private var stack = AnimatedStack<Int>()\n    private var minStack = AnimatedStack<Int>()\n    \n    mutating func push(_ val: Int) {\n        stack.push(val)\n        if minStack.isEmpty || val <= (minStack.peek() ?? val) {\n            minStack.push(val)\n        }\n    }\n    \n    mutating func pop() {\n        if let popped = stack.pop() {\n            if popped == minStack.peek() {\n                minStack.pop()\n            }\n        }\n    }\n    \n    func top() -> Int {\n        return stack.peek() ?? -1\n    }\n    \n    func getMin() -> Int {\n        return minStack.peek() ?? -1\n    }\n}\n\nvar minStackObj = MinStack()\nminStackObj.push(10)\nminStackObj.push(5)\nminStackObj.push(20)\nlet currentMin = minStackObj.getMin()\nminStackObj.pop()",
+  "tags": [
+    "stack",
+    "design",
+    "min"
+  ],
+  "moduleID": "stack"
+}

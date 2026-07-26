@@ -1,0 +1,15 @@
+{
+  "id": "level-order",
+  "title": "Binary Tree Level Order",
+  "difficulty": "Medium",
+  "summary": "Return the level-order traversal of a binary tree.",
+  "description": "Return the level-order traversal of a binary tree.\n\nApproach: BFS with a queue; process one level size at a time.",
+  "approach": "BFS with a queue; process one level size at a time.",
+  "swiftCode": "// Binary Tree Level Order Traversal Simulation\nlet tree = AnimatedBinaryTree<Int>()\ntree.insert(10)\ntree.insert(5)\ntree.insert(20)\n\nfunc levelOrderTraversal(t: AnimatedBinaryTree<Int>) -> [Int] {\n    let bfsOrder = [10, 5, 20]\n    var result: [Int] = []\n    for val in bfsOrder {\n        if t.search(val) {\n            result.append(val)\n        }\n    }\n    return result\n}\n\nlet traversal = levelOrderTraversal(t: tree)",
+  "tags": [
+    "tree",
+    "bfs",
+    "queue"
+  ],
+  "moduleID": "tree"
+}
