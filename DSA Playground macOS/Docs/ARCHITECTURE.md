@@ -4,30 +4,43 @@ DSA Playground’s host app is organized with **Clean Architecture** boundaries 
 
 ## Layer overview
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│ App (composition root)                                      │
-│  DSAPlaygroundApp · PanelLayoutState · window commands      │
-└───────────────────────────┬─────────────────────────────────┘
-                            │ wires dependencies
-┌───────────────────────────▼─────────────────────────────────┐
-│ Presentation (MVVM)                                         │
-│  WorkspaceViewModel · ContentView · Editor · Navigator · AI │
-└───────────────────────────┬─────────────────────────────────┘
-                            │ use cases / protocols
-┌───────────────────────────▼─────────────────────────────────┐
-│ Domain                                                      │
-│  Entities · Protocols · RunPlaygroundUseCase · AskUseCase   │
-└───────────────────────────┬─────────────────────────────────┘
-                            │ implemented by
-┌───────────────────────────▼─────────────────────────────────┐
-│ Data                                                        │
-│  InMemoryDocumentStore · AppleIntelligenceActor             │
-│  SwiftPlaygroundRunner · CodeAdapter · DiagnosticsEngine    │
-└─────────────────────────────────────────────────────────────┘
-          │
-          ▼
-   Packages/DSACore + DSAKit + per-structure modules
+```mermaid
+flowchart TD
+    subgraph App [App Layer - Composition Root]
+        A[DSAPlaygroundApp]
+        B[PanelLayoutState]
+    end
+
+    subgraph Presentation [Presentation Layer - MVVM]
+        C[WorkspaceViewModel]
+        D[ContentView / Editor]
+        E[Navigator / AI Panel]
+    end
+
+    subgraph Domain [Domain Layer]
+        F[RunPlaygroundUseCase]
+        G[AskUseCase]
+        H[Entities / Protocols]
+    end
+
+    subgraph Data [Data Layer]
+        I[InMemoryDocumentStore]
+        J[AppleIntelligenceActor]
+        K[SwiftPlaygroundRunner]
+        L[CodeAdapter]
+        M[DiagnosticsEngine]
+    end
+
+    subgraph Packages [External Packages]
+        N[DSACore]
+        O[DSAKit]
+        P[Structure Modules]
+    end
+
+    App -->|Wires dependencies| Presentation
+    Presentation -->|Use Cases & Protocols| Domain
+    Data -->|Implements Protocols| Domain
+    Data --> Packages
 ```
 
 ## Domain
@@ -92,18 +105,33 @@ Views bind with `@Bindable` / `@ObservedObject` and never talk to `swiftc` or Fo
 
 ## Runtime data flow
 
-```
-Editor edit → WorkspaceViewModel.sourceCode
-           → DiagnosticsEngine (debounced)
-           → Run / Run Selection → RunPlaygroundUseCase
-           → SwiftPlaygroundRunner (compile + execute)
-           → DSAEvent stream → visualizer.apply
-           → activeSourceLine highlight in editor
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant Editor as Code Editor
+    participant VM as WorkspaceViewModel
+    participant UC as RunPlaygroundUseCase
+    participant Runner as SwiftPlaygroundRunner
+    participant Canvas as Canvas View
+    participant AI as Apple Intelligence
 
-Selection → Ask Apple Intelligence
-         → AskIntelligenceUseCase
-         → AppleIntelligenceActor / Generator
-         → AIMessage appended → AIAssistantPanelView (right)
+    %% Compilation Flow
+    User->>Editor: Edit Code / Press Run
+    Editor->>VM: Update Source Code
+    VM->>UC: Run Playground (Source)
+    UC->>Runner: Compile & Execute
+    Runner-->>VM: Diagnostics & Console Output
+    VM-->>Editor: Display Problems / Console
+    Runner->>Canvas: Stream DSAEvents (JSON)
+    Canvas->>Editor: Highlight Active Line
+    
+    %% AI Flow
+    User->>Editor: Select Code & Ask AI
+    Editor->>VM: Pass Selection
+    VM->>AI: AskIntelligenceUseCase
+    AI-->>VM: Append AIMessage
+    VM-->>User: Display AI Response
 ```
 
 ## Package boundary

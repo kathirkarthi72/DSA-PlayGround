@@ -1,5 +1,33 @@
 # Usage & user guide
 
+## User journey workflow
+
+Here is the typical step-by-step path when exploring data structures or working on code within the playground:
+
+```mermaid
+flowchart TD
+    Start([Start Playground App]) --> SelectDSA[Select DSA Module in Sidebar]
+    SelectDSA --> ChooseCode{Choose Source Code}
+    ChooseCode -->|Built-in Sample| LoadSample[Load Built-in Sample]
+    ChooseCode -->|Question Bank| OpenQuestion[Open Interview Question Tab]
+    ChooseCode -->|Write custom| WriteCode[Write Custom Swift Code]
+    
+    LoadSample --> EditCode[Modify Code if needed]
+    OpenQuestion --> EditCode
+    WriteCode --> EditCode
+    
+    EditCode --> CheckDiagnostics{Check Problems Pane}
+    CheckDiagnostics -->|Errors present| ApplyFix[Accept Diagnostics Fix or Ask AI]
+    ApplyFix --> EditCode
+    CheckDiagnostics -->|No Errors| RunCode[Run Code / Run Selection]
+    
+    RunCode --> PlayAnimation[Watch Canvas View & Timeline Scrubbing]
+    PlayAnimation --> Stuck{Stuck / Confused?}
+    Stuck -->|Yes| AskAI[Ask AI for explanation / switch to Agent]
+    AskAI --> EditCode
+    Stuck -->|No| Done([Mastered Concept!])
+```
+
 ## First launch
 
 1. Generate and open the Xcode project (`xcodegen generate` → open `DSAPlayground.xcodeproj`).

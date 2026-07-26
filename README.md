@@ -55,6 +55,21 @@ The host app follows **Clean Architecture** + **MVVM**:
 
 DSA structures live as pluggable Swift packages under `Packages/` (`DSACore`, `DSAKit`, `DSAArray`, …).
 
+### System interaction
+
+```mermaid
+graph TD
+    User([User]) -->|Edits code / Runs| Editor[Code Editor]
+    Editor -->|Source code| Runner[SwiftPlaygroundRunner]
+    Runner -->|Compiles with swiftc| Compiler([Local Compiler])
+    Compiler -->|Output / Errors| Console[Console / Problems Panel]
+    Compiler -->|Streamed DSAEvents| Canvas[Canvas View]
+    Canvas -->|Highlights active line| Editor
+    User -->|Selects code / Asks AI| AIPanel[Apple Intelligence Panel]
+    AIPanel -->|Generates solutions / explains| Editor
+    AIPanel -.->|Local fallback or on-device model| Model([Foundation Model])
+```
+
 ## Core workflow
 
 1. Open a DSA folder in the **Explorer** (Array, Stack, Queue, …) and select `main.swift` or another file.

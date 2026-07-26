@@ -18,6 +18,34 @@ Dependency rule: **Presentation → Domain ← Data**.
 - Data implements those ports.
 - Use cases (`RunPlaygroundUseCase`, `AskIntelligenceUseCase`) orchestrate without knowing SwiftUI.
 
+```mermaid
+classDiagram
+    class Presentation {
+        +WorkspaceViewModel
+        +ContentView
+    }
+    class Domain_Protocols {
+        <<interface>>
+        +PlaygroundRunning
+        +IntelligenceGenerating
+        +DocumentStoring
+    }
+    class Domain_UseCases {
+        +RunPlaygroundUseCase
+        +AskIntelligenceUseCase
+    }
+    class Data_Implementations {
+        +SwiftPlaygroundRunner
+        +AppleIntelligenceActor
+        +InMemoryDocumentStore
+    }
+    
+    Presentation --> Domain_UseCases : triggers
+    Presentation ..> Domain_Protocols : references
+    Domain_UseCases --> Domain_Protocols : invokes
+    Data_Implementations ..|> Domain_Protocols : implements
+```
+
 ## Registry
 
 `DSAModuleRegistry` holds pluggable `DSAModule` instances. The composition root registers Array, Linked List, Stack, Queue, Hash Table, Heap, and Tree. The navigator and toolbar read modules from the registry only.
@@ -43,3 +71,39 @@ Dependency rule: **Presentation → Domain ← Data**.
 ## Strategy (visualizers)
 
 Each DSA module supplies its own `DSAVisualizer` strategy (`makeVisualizer()`). The host plays the same `DSAEvent` stream against whichever strategy is active.
+
+```mermaid
+classDiagram
+    class DSAModuleRegistry {
+        +modules: [DSAModule]
+        +register(module: DSAModule)
+    }
+    class DSAModule {
+        <<interface>>
+        +makeVisualizer() DSAVisualizer
+    }
+    class DSAVisualizer {
+        <<interface>>
+        +apply(event: DSAEvent)
+    }
+    class StackModule {
+        +makeVisualizer() DSAVisualizer
+    }
+    class StackVisualizer {
+        +apply(event: DSAEvent)
+    }
+    class TreeModule {
+        +makeVisualizer() DSAVisualizer
+    }
+    class TreeVisualizer {
+        +apply(event: DSAEvent)
+    }
+
+    DSAModuleRegistry o--> DSAModule : contains
+    StackModule ..|> DSAModule
+    TreeModule ..|> DSAModule
+    StackVisualizer ..|> DSAVisualizer
+    TreeVisualizer ..|> DSAVisualizer
+    StackModule --> StackVisualizer : creates
+    TreeModule --> TreeVisualizer : creates
+```

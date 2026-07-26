@@ -1,5 +1,33 @@
 # Features
 
+## Application layout
+
+The interface is structured in a single-window workspace with split panes to make learning, writing, and animating code seamless:
+
+```mermaid
+graph TD
+    subgraph MainWindow [macOS Single Window Layout]
+        subgraph Sidebar [Sidebar Pane]
+            Picker[DSA Picker]
+            Files[Files List]
+            QBank[Question Bank]
+            Search[Search Field]
+        end
+        subgraph CenterArea [Center Area]
+            Tabs[Multi-File Tabs]
+            Editor[Code Editor]
+            Canvas[Canvas View / Animation Canvas]
+            Console[Console / Timeline Flow Panel]
+        end
+        subgraph AIPanel [Apple Intelligence Panel]
+            ChatHistory[Chat History]
+            Composer[Composer: Ask / Agent Mode]
+        end
+    end
+    Sidebar --- CenterArea
+    CenterArea --- AIPanel
+```
+
 ## DSA file navigator
 
 - Top **DSA picker** switches the active structure (Array, Linked List, Stack, Queue, Hash Table, Heap, Tree)
