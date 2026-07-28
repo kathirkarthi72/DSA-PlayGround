@@ -3,6 +3,7 @@ import AppKit
 
 struct CodeEditorView: NSViewRepresentable {
     @Binding var text: String
+    var isEditable: Bool = true
     /// 1-based caret / focused line.
     var focusedLine: Int = 1
     /// 1-based line to emphasize (hover or click from canvas / diagnostic).
@@ -51,7 +52,7 @@ struct CodeEditorView: NSViewRepresentable {
         let textView = PlaygroundTextView(frame: .zero)
         textView.completionDelegate = context.coordinator
         textView.delegate = context.coordinator
-        textView.isEditable = true
+        textView.isEditable = isEditable
         textView.isSelectable = true
         textView.allowsUndo = true
         textView.drawsBackground = true
@@ -141,6 +142,10 @@ struct CodeEditorView: NSViewRepresentable {
 
         context.coordinator.syncTextLayout(scrollView: scrollView, textView: textView)
         editor.gutterView.onToggleFold = { line in self.onToggleFold?(line) }
+
+        if textView.isEditable != isEditable {
+            textView.isEditable = isEditable
+        }
 
         let textChanged = textView.string != text
         let focusChanged = context.coordinator.lastFocusedLine != focusedLine

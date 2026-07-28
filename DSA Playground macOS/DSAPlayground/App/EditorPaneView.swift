@@ -14,48 +14,75 @@ struct EditorPaneView: View {
             if layout.adjustEditor {
                 adjustControls
             }
-            CodeEditorView(
-                text: Binding(
-                    get: { session.sourceCode },
-                    set: { newValue in
-                        let old = session.sourceCode
-                        session.sourceCode = newValue
-                        session.handleEditorChange(from: old, to: newValue)
+            ZStack(alignment: .topTrailing) {
+                CodeEditorView(
+                    text: Binding(
+                        get: { session.sourceCode },
+                        set: { newValue in
+                            let old = session.sourceCode
+                            session.sourceCode = newValue
+                            session.handleEditorChange(from: old, to: newValue)
+                        }
+                    ),
+                    isEditable: !(session.activeDocument?.isReadOnly ?? false),
+                    focusedLine: session.focusedLine,
+                    emphasizedLine: session.activeSourceLine ?? session.selectedDiagnostic?.line,
+                    previousContextLine: session.previousSourceLine,
+                    nextContextLine: session.nextSourceLine,
+                    useAppleIntelligenceCompletion: session.useAICompletion,
+                    intelligence: session.intelligence,
+                    diagnostics: session.activeDiagnostics,
+                    showLineNumbers: session.showLineNumbers,
+                    enableCodeFolding: session.enableCodeFolding,
+                    foldableLines: session.foldableLines(in: session.sourceCode),
+                    foldedLines: session.foldedStartLines(for: session.activeDocumentID),
+                    fontSize: CGFloat(session.editorFontSize),
+                    onToggleFold: { line in session.toggleFold(at: line) },
+                    onCaretChange: { line, column, selected in
+                        session.updateCaret(line: line, column: column, selectedText: selected)
+                    },
+                    onRunSelection: { code in
+                        session.runSelection(code)
+                    },
+                    onAskIntelligence: { code in
+                        layout.showAIPanel = true
+                        session.aiMode = .ask
+                        session.updateCaret(
+                            line: session.focusedLine,
+                            column: session.focusedColumn,
+                            selectedText: code
+                        )
+                        session.askAppleIntelligence(code: code)
                     }
-                ),
-                focusedLine: session.focusedLine,
-                emphasizedLine: session.activeSourceLine ?? session.selectedDiagnostic?.line,
-                previousContextLine: session.previousSourceLine,
-                nextContextLine: session.nextSourceLine,
-                useAppleIntelligenceCompletion: session.useAICompletion,
-                intelligence: session.intelligence,
-                diagnostics: session.activeDiagnostics,
-                showLineNumbers: session.showLineNumbers,
-                enableCodeFolding: session.enableCodeFolding,
-                foldableLines: session.foldableLines(in: session.sourceCode),
-                foldedLines: session.foldedStartLines(for: session.activeDocumentID),
-                fontSize: CGFloat(session.editorFontSize),
-                onToggleFold: { line in session.toggleFold(at: line) },
-                onCaretChange: { line, column, selected in
-                    session.updateCaret(line: line, column: column, selectedText: selected)
-                },
-                onRunSelection: { code in
-                    session.runSelection(code)
-                },
-                onAskIntelligence: { code in
-                    layout.showAIPanel = true
-                    session.aiMode = .ask
-                    session.updateCaret(
-                        line: session.focusedLine,
-                        column: session.focusedColumn,
-                        selectedText: code
+                )
+                // Recreate the AppKit text view when the active tab changes so Question Bank /
+                // file switches always show the selected document's source.
+                .id(session.activeDocumentID)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                if session.activeDocument?.isReadOnly ?? false {
+                    HStack(spacing: 5) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 11, weight: .bold))
+                        Text("Locked")
+                            .font(.system(size: 10, weight: .bold))
+                            .textCase(.uppercase)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(Color(red: 0.2, green: 0.2, blue: 0.23).opacity(0.85))
+                            .overlay(
+                                Capsule().stroke(Color.white.opacity(0.12), lineWidth: 1)
+                            )
                     )
-                    session.askAppleIntelligence(code: code)
+                    .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
+                    .padding(14)
+                    .transition(.opacity.combined(with: .scale))
                 }
-            )
-            // Recreate the AppKit text view when the active tab changes so Question Bank /
-            // file switches always show the selected document's source.
-            .id(session.activeDocumentID)
+            }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             if session.showDiagnosticsPanel {
@@ -148,6 +175,9 @@ struct EditorPaneView: View {
 
     private func fileTab(_ document: EditorDocument) -> some View {
         let selected = document.id == session.activeDocumentID
+        let requiredNames = ["main.swift", "helpers.swift", "tests.swift", "inbuild.swift"]
+        let isRequired = requiredNames.contains(document.name.lowercased())
+        
         return HStack(spacing: 7) {
             SwiftFileIcon(size: 13)
 
@@ -159,7 +189,12 @@ struct EditorPaneView: View {
             .foregroundStyle(selected ? EditorChrome.primaryText : EditorChrome.mutedText)
             .lineLimit(1)
 
-            if session.documents.count > 1 {
+            if document.isReadOnly {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 9))
+                    .foregroundStyle(EditorChrome.mutedText.opacity(selected ? 0.9 : 0.55))
+                    .help("Read-only file (Locked)")
+            } else if !isRequired && session.documents.count > 1 {
                 Button {
                     session.closeDocument(id: document.id)
                 } label: {

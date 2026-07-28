@@ -6,17 +6,20 @@ struct EditorDocument: Identifiable, Hashable, Equatable, Sendable {
     var content: String
     /// Compiled as `main.swift` (top-level entry). Other tabs are support files.
     var isEntrypoint: Bool
+    var isReadOnly: Bool
 
     init(
         id: UUID = UUID(),
         name: String,
         content: String = "",
-        isEntrypoint: Bool = false
+        isEntrypoint: Bool = false,
+        isReadOnly: Bool = false
     ) {
         self.id = id
         self.name = name
         self.content = content
         self.isEntrypoint = isEntrypoint
+        self.isReadOnly = isReadOnly
     }
 }
 

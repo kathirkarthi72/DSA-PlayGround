@@ -79,7 +79,31 @@ final class SwiftPlaygroundRunner: ObservableObject, PlaygroundRunning {
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
 
         let kitSources = try resolveDSAKitSources()
+        
+        var excludeFilename: String? = nil
+        if let inbuildSource = sources.first(where: { $0.name == "inbuild.swift" }) {
+            let content = inbuildSource.content
+            if content.contains("class AnimatedLinkedList") {
+                excludeFilename = "AnimatedLinkedList.swift"
+            } else if content.contains("struct AnimatedArray") {
+                excludeFilename = "AnimatedArray.swift"
+            } else if content.contains("struct AnimatedStack") {
+                excludeFilename = "AnimatedStack.swift"
+            } else if content.contains("struct AnimatedQueue") {
+                excludeFilename = "AnimatedQueue.swift"
+            } else if content.contains("struct AnimatedHashTable") {
+                excludeFilename = "AnimatedHashTable.swift"
+            } else if content.contains("struct AnimatedHeap") {
+                excludeFilename = "AnimatedHeap.swift"
+            } else if content.contains("class AnimatedBinaryTree") {
+                excludeFilename = "AnimatedBinaryTree.swift"
+            }
+        }
+
         for file in kitSources {
+            if let excludeFilename, file.lastPathComponent == excludeFilename {
+                continue
+            }
             let destination = dir.appendingPathComponent(file.lastPathComponent)
             try FileManager.default.copyItem(at: file, to: destination)
         }

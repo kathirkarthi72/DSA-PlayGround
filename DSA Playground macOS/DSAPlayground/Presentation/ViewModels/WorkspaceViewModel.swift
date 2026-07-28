@@ -157,6 +157,10 @@ final class WorkspaceViewModel {
         documents.firstIndex(where: { $0.id == activeDocumentID })
     }
 
+    var activeDocument: EditorDocument? {
+        documents.first(where: { $0.id == activeDocumentID })
+    }
+
     var sourceCode: String {
         get { documents.first(where: { $0.id == activeDocumentID })?.content ?? "" }
         set {
@@ -802,6 +806,11 @@ final class WorkspaceViewModel {
     }
 
     func closeDocument(id: UUID) {
+        guard let doc = documents.first(where: { $0.id == id }) else { return }
+        let requiredNames = ["main.swift", "helpers.swift", "tests.swift", "inbuild.swift"]
+        if requiredNames.contains(doc.name) {
+            return
+        }
         guard documents.count > 1,
               let index = documents.firstIndex(where: { $0.id == id }) else { return }
         let wasActive = activeDocumentID == id

@@ -28,7 +28,11 @@ struct RunPlaygroundUseCase {
         guard !trimmed.isEmpty else { return }
 
         var sources: [(name: String, content: String)] = supportDocuments
-            .filter { Self.isLibraryOnlySource($0.content) }
+            .filter { doc in
+                let nameLower = doc.name.lowercased()
+                if nameLower == "tests.swift" { return false }
+                return ["helpers.swift", "inbuild.swift"].contains(nameLower) || Self.isLibraryOnlySource(doc.content)
+            }
             .map { (name: $0.name, content: $0.content) }
 
         let entry = """
@@ -51,7 +55,9 @@ struct RunPlaygroundUseCase {
         let preferred = activeDocumentID.flatMap { id in documents.first(where: { $0.id == id }) }
         let entry = documents.first(where: \.isEntrypoint)
         let mainDoc: EditorDocument
-        if let preferred, preferred.name != "Helpers.swift" {
+        
+        let preferredName = preferred?.name.lowercased()
+        if let preferred, preferredName != "helpers.swift" && preferredName != "inbuild.swift" {
             mainDoc = preferred
         } else {
             mainDoc = entry ?? preferred ?? documents[0]
@@ -62,7 +68,16 @@ struct RunPlaygroundUseCase {
         ]
 
         for doc in documents where doc.id != mainDoc.id {
-            if isLibraryOnlySource(doc.content) {
+            let docNameLower = doc.name.lowercased()
+            let isRequiredSupportFile = ["helpers.swift", "inbuild.swift"].contains(docNameLower)
+            
+            // Do not include tests.swift as a support file because it has top-level executable code (to run tests)
+            // which would collide with the top-level code of the main entrypoint file.
+            if docNameLower == "tests.swift" {
+                continue
+            }
+            
+            if isRequiredSupportFile || isLibraryOnlySource(doc.content) {
                 let name = doc.name.hasSuffix(".swift") ? doc.name : doc.name + ".swift"
                 // Avoid colliding with the synthetic main name.
                 let safeName = name == "main.swift" ? "Support-\(doc.id.uuidString.prefix(8)).swift" : name
