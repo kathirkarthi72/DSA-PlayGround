@@ -74,7 +74,7 @@ struct StackCanvas: View {
     }
 
     var body: some View {
-        VisualizerChrome(caption: visualizer.caption) {
+        VisualizerChrome(caption: visualizer.caption, event: visualizer.lastEvent, nodes: visualizer.nodes) {
             if visualizer.structures.isEmpty {
                 EmptyVisualizerPlaceholder(title: "Stack")
             } else if visualizer.structures.count == 1, let firstPair = visualizer.structures.first {

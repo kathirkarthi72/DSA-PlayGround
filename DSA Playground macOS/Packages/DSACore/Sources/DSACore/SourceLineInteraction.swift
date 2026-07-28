@@ -52,30 +52,64 @@ public enum SourceLineLocator {
         previous: [VizNode],
         event: DSAEvent
     ) -> [VizNode] {
-        var claimed = Set<String>()
-        return values.enumerated().map { index, value in
-            let id = "\(idPrefix)-\(index)"
-            var sourceLine = previous.first(where: { $0.id == id })?.sourceLine
+        var matches = [VizNode?](repeating: nil, count: values.count)
+        var usedPreviousIndices = Set<Int>()
 
-            if sourceLine == nil {
-                if let match = previous.first(where: { $0.value == value && !claimed.contains($0.id) }) {
-                    sourceLine = match.sourceLine
-                    claimed.insert(match.id)
+        // Pass 1: Match by exact index and value
+        for i in 0..<values.count {
+            if i < previous.count {
+                let prevNode = previous[i]
+                if prevNode.value == values[i] {
+                    matches[i] = prevNode
+                    usedPreviousIndices.insert(i)
                 }
+            }
+        }
+
+        // Pass 2: Match by value anywhere (e.g. for moves/swaps)
+        for i in 0..<values.count {
+            if matches[i] == nil {
+                if let foundIndex = previous.enumerated().first(where: { idx, prevNode in
+                    !usedPreviousIndices.contains(idx) && prevNode.value == values[i]
+                })?.offset {
+                    matches[i] = previous[foundIndex]
+                    usedPreviousIndices.insert(foundIndex)
+                }
+            }
+        }
+
+        // Pass 3: Match by index proximity (for inline updates where value changed, like set/put)
+        for i in 0..<values.count {
+            if matches[i] == nil {
+                if i < previous.count && !usedPreviousIndices.contains(i) {
+                    var updatedNode = previous[i]
+                    updatedNode.value = values[i]
+                    matches[i] = updatedNode
+                    usedPreviousIndices.insert(i)
+                }
+            }
+        }
+
+        // Pass 4: Fallback / New Node (newly inserted elements)
+        return values.enumerated().map { index, value in
+            let highlight = highlights.contains(index)
+            
+            if let matched = matches[index] {
+                var node = matched
+                node.highlighted = highlight
+                if highlight || event.index == index {
+                    node.sourceLine = event.sourceLine ?? node.sourceLine
+                }
+                return node
             } else {
-                claimed.insert(id)
+                let newId = "\(idPrefix)-node-\(UUID().uuidString)"
+                return VizNode(
+                    id: newId,
+                    value: value,
+                    highlighted: highlight,
+                    sourceLine: (highlight || event.index == index) ? event.sourceLine : nil
+                )
             }
-
-            if highlights.contains(index) || event.index == index {
-                sourceLine = event.sourceLine ?? sourceLine
-            }
-
-            return VizNode(
-                id: id,
-                value: value,
-                highlighted: highlights.contains(index),
-                sourceLine: sourceLine
-            )
         }
     }
 }

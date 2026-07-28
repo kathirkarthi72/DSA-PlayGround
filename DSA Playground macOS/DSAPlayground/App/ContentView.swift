@@ -172,7 +172,7 @@ struct ContentView: View {
 
     private var sidebar: some View {
         DSAFileNavigatorView(session: session, layout: layout)
-            .navigationTitle(session.selectedModule.title)
+            .navigationTitle("")
     }
 
     private var mainWorkspace: some View {
@@ -188,7 +188,7 @@ struct ContentView: View {
             }
         }
         .background(PlaygroundTheme.background)
-        .navigationTitle(session.selectedModule.title)
+        .navigationTitle("")
     }
 
     @ViewBuilder

@@ -91,7 +91,7 @@ struct LinkedListCanvas: View {
     }
 
     var body: some View {
-        VisualizerChrome(caption: visualizer.caption) {
+        VisualizerChrome(caption: visualizer.caption, event: visualizer.lastEvent, nodes: visualizer.nodes) {
             if visualizer.structures.isEmpty {
                 EmptyVisualizerPlaceholder(title: "Linked List")
             } else if visualizer.structures.count == 1, let firstPair = visualizer.structures.first {
@@ -151,6 +151,7 @@ struct LinkedListCanvas: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 8)
+            .animation(PlaygroundTheme.springBouncy, value: nodes)
         }
     }
 }

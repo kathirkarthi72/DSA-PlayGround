@@ -85,9 +85,25 @@ struct EditorPaneView: View {
             Spacer()
             Text(session.selectedModule.title)
                 .font(.system(size: 11, weight: .medium))
+            
+            Divider()
+                .frame(height: 12)
+            
+            Button {
+                layout.showConsole.toggle()
+            } label: {
+                Image(systemName: "terminal")
+                    .font(.system(size: 11))
+                    .foregroundStyle(layout.showConsole ? EditorChrome.primaryText : EditorChrome.mutedText)
+                    .frame(width: 24, height: 24)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .help("Toggle Console (⌃⌘5)")
         }
         .foregroundStyle(EditorChrome.mutedText)
-        .padding(.horizontal, 12)
+        .padding(.leading, 12)
+        .padding(.trailing, 4)
         .frame(height: 24)
         .background(.thinMaterial)
         .overlay(alignment: .top) {

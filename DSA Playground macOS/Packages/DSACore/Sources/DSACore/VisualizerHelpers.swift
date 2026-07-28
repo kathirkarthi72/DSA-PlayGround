@@ -187,6 +187,15 @@ public struct InteractiveNodeChip: View {
             height: height
         )
         .contentShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .background(
+            GeometryReader { geo in
+                Color.clear
+                    .preference(
+                        key: NodeFramesPreferenceKey.self,
+                        value: [node.id: geo.frame(in: .named("VisualizerCanvas"))]
+                    )
+            }
+        )
         .onHover { hovering in
             isHovering = hovering
             if hovering {
@@ -232,12 +241,31 @@ public struct EmptyVisualizerPlaceholder: View {
     }
 }
 
+public struct NodeFramesPreferenceKey: PreferenceKey {
+    public typealias Value = [String: CGRect]
+    public static var defaultValue: [String: CGRect] = [:]
+    public static func reduce(value: inout [String: CGRect], nextValue: () -> [String: CGRect]) {
+        value.merge(nextValue(), uniquingKeysWith: { $1 })
+    }
+}
+
 public struct VisualizerChrome<Content: View>: View {
     public let caption: String
+    public let event: DSAEvent?
+    public let nodes: [VizNode]?
     @ViewBuilder public var content: () -> Content
 
-    public init(caption: String, @ViewBuilder content: @escaping () -> Content) {
+    @State private var nodeFrames: [String: CGRect] = [:]
+
+    public init(
+        caption: String,
+        event: DSAEvent? = nil,
+        nodes: [VizNode]? = nil,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
         self.caption = caption
+        self.event = event
+        self.nodes = nodes
         self.content = content
     }
 
@@ -245,7 +273,16 @@ public struct VisualizerChrome<Content: View>: View {
         VStack(spacing: 14) {
             ZStack {
                 AnimatedGridBackground()
+                
                 content()
+                
+                if let event = event, let nodes = nodes {
+                    VisualizerOverlayCurvesView(event: event, nodeFrames: nodeFrames, nodes: nodes)
+                }
+            }
+            .coordinateSpace(name: "VisualizerCanvas")
+            .onPreferenceChange(NodeFramesPreferenceKey.self) { frames in
+                self.nodeFrames = frames
             }
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
 
@@ -398,3 +435,92 @@ public struct PointerOverlayView: View {
     }
 }
 
+public struct VisualizerOverlayCurvesView: View {
+    public let event: DSAEvent
+    public let nodeFrames: [String: CGRect]
+    public let nodes: [VizNode]
+
+    public var body: some View {
+        Canvas { context, size in
+            let type = event.type.lowercased()
+            
+            guard event.highlight.count >= 2 else { return }
+            
+            let i = event.highlight[0]
+            let j = event.highlight[1]
+            
+            guard i < nodes.count, j < nodes.count else { return }
+            let node1 = nodes[i]
+            let node2 = nodes[j]
+            
+            guard let rect1 = nodeFrames[node1.id],
+                  let rect2 = nodeFrames[node2.id] else { return }
+            
+            drawCurve(from: rect1, to: rect2, type: type, in: &context)
+        }
+        .allowsHitTesting(false)
+    }
+
+    private func drawCurve(from rect1: CGRect, to rect2: CGRect, type: String, in context: inout GraphicsContext) {
+        let p1 = CGPoint(x: rect1.midX, y: rect1.maxY)
+        let p2 = CGPoint(x: rect2.midX, y: rect2.maxY)
+        
+        let isLeftToRight = p1.x <= p2.x
+        let start = isLeftToRight ? p1 : p2
+        let end = isLeftToRight ? p2 : p1
+        
+        let dx = end.x - start.x
+        let depth = max(30, abs(dx) * 0.25)
+        
+        var path = Path()
+        path.move(to: start)
+        
+        let control1 = CGPoint(x: start.x, y: start.y + depth)
+        let control2 = CGPoint(x: end.x, y: end.y + depth)
+        
+        path.addCurve(to: end, control1: control1, control2: control2)
+        
+        var style = StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round)
+        var color = PlaygroundTheme.accentSecondary
+        
+        if type == "compare" {
+            style.dash = [5, 4]
+            color = PlaygroundTheme.accent
+        } else if type == "swap" {
+            color = PlaygroundTheme.accentSecondary
+        } else {
+            color = PlaygroundTheme.nodeHighlight
+        }
+        
+        context.stroke(path, with: .color(color), style: style)
+        
+        let arrowTarget = isLeftToRight ? end : start
+        let arrowSourceControl = isLeftToRight ? control2 : control1
+        drawArrowHead(at: arrowTarget, fromControl: arrowSourceControl, color: color, in: &context)
+        
+        if type == "swap" {
+            let otherTarget = isLeftToRight ? start : end
+            let otherSourceControl = isLeftToRight ? control1 : control2
+            drawArrowHead(at: otherTarget, fromControl: otherSourceControl, color: color, in: &context)
+        }
+    }
+    
+    private func drawArrowHead(at point: CGPoint, fromControl control: CGPoint, color: Color, in context: inout GraphicsContext) {
+        let angle = atan2(point.y - control.y, point.x - control.x)
+        let arrowLength: CGFloat = 8
+        let arrowAngle: CGFloat = .pi / 6
+        
+        var arrowPath = Path()
+        let x1 = point.x - arrowLength * cos(angle + arrowAngle)
+        let y1 = point.y - arrowLength * sin(angle + arrowAngle)
+        let x2 = point.x - arrowLength * cos(angle - arrowAngle)
+        let y2 = point.y - arrowLength * sin(angle - arrowAngle)
+        
+        arrowPath.move(to: point)
+        arrowPath.addLine(to: CGPoint(x: x1, y: y1))
+        arrowPath.addLine(to: CGPoint(x: x2, y: y2))
+        arrowPath.closeSubpath()
+        
+        context.fill(arrowPath, with: .color(color))
+    }
+}
